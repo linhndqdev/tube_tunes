@@ -5,6 +5,7 @@ import 'package:tube_tunes/screens/playing_now/playing_now_screen.dart';
 import 'package:tube_tunes/screens/root/root_widget.dart';
 import 'package:tube_tunes/screens/search_result/search_result_screen.dart';
 import 'package:tube_tunes/screens/splashscreen/splash_screen.dart';
+import 'package:tube_tunes/util/youtube/src/model/youtube_video.dart';
 
 import 'fade_route.dart';
 import 'routes.dart';
@@ -32,7 +33,9 @@ class ScreenRouter {
         );
       case Routes.playingNow:
         return FadeRoute(
-          page: const PlayingNowScreen(),
+          page: PlayingNowScreen(
+            video: settings.arguments as YouTubeVideo,
+          ),
         );
 
       // case Routes.home:

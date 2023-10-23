@@ -5,7 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tube_tunes/res/assets.dart';
 
-enum Tabs { home, search, playlist, saved }
+enum Tabs {
+  search,
+  home,
+  // playlist,
+  // saved,
+}
 
 extension TabExt on Tabs {
   String get name {
@@ -14,10 +19,10 @@ extension TabExt on Tabs {
         return "Home";
       case Tabs.search:
         return "Search";
-      case Tabs.playlist:
-        return "Playlist";
-      case Tabs.saved:
-        return "Saved";
+      // case Tabs.playlist:
+      //   return "Playlist";
+      // case Tabs.saved:
+      //   return "Saved";
       default:
         return "";
     }
@@ -29,10 +34,10 @@ extension TabExt on Tabs {
         return Assets.HOME_SELECTED_TAB;
       case Tabs.search:
         return Assets.SEARCH_SELECTED_TAB;
-      case Tabs.playlist:
-        return Assets.MUSIC_SELECTED_TAB;
-      case Tabs.saved:
-        return Assets.BOOKMARK_SELECTED_TAB;
+      // case Tabs.playlist:
+      //   return Assets.MUSIC_SELECTED_TAB;
+      // case Tabs.saved:
+      //   return Assets.BOOKMARK_SELECTED_TAB;
       default:
         return "";
     }
@@ -44,10 +49,10 @@ extension TabExt on Tabs {
         return Assets.HOME_UNSELECTED_TAB;
       case Tabs.search:
         return Assets.SEARCH_UNSELECTED_TAB;
-      case Tabs.playlist:
-        return Assets.MUSIC_UNSELECTED_TAB;
-      case Tabs.saved:
-        return Assets.BOOKMARK_UNSELECTED_TAB;
+      // case Tabs.playlist:
+      //   return Assets.MUSIC_UNSELECTED_TAB;
+      // case Tabs.saved:
+      //   return Assets.BOOKMARK_UNSELECTED_TAB;
       default:
         return "";
     }
@@ -57,6 +62,7 @@ extension TabExt on Tabs {
 class BottomNav extends StatelessWidget {
   final Tabs currentTab;
   final ValueChanged<Tabs> didSelectTab;
+
   const BottomNav(
       {Key? key, required this.currentTab, required this.didSelectTab})
       : super(key: key);

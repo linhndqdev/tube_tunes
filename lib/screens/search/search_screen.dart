@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tube_tunes/models/album_model.dart';
 import 'package:tube_tunes/res/assets.dart';
 import 'package:tube_tunes/res/styles.dart';
 import 'package:tube_tunes/util/navigation/navigation_service.dart';
 import 'package:tube_tunes/util/navigation/routes.dart';
+import 'package:tube_tunes/util/youtube/src/model/youtube_video.dart';
+import 'package:tube_tunes/util/youtube/youtube_api.dart';
 
 class SearchScreen extends StatefulWidget {
   final bool isCurrent;
@@ -18,80 +19,101 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<AlbumModel> models = [
-    AlbumModel(
-      id: 1,
-      image: "assets/png/home/home1.png",
-      title: 'Satisfied',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    ),
-    AlbumModel(
-      id: 2,
-      image: "assets/png/home/home2.png",
-      title: 'The Cross: My Gaze',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    ),
-    AlbumModel(
-      id: 3,
-      image: "assets/png/home/home3.png",
-      title: 'Yahweh',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    ),
-    AlbumModel(
-      id: 4,
-      image: "assets/png/home/home4.png",
-      title: 'Onyedikagi',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    ),
-    AlbumModel(
-      id: 5,
-      image: "assets/png/home/home5.png",
-      title: 'Igwe',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    ),
-    AlbumModel(
-      id: 6,
-      image: "assets/png/home/home6.png",
-      title: 'Eze',
-      artist: 'Mercy Chinwo',
-      year: '2021',
-      download: 1,
-      plays: 2,
-      songs: 2,
-      genre: "",
-      like: 2,
-    )
-  ];
+  static String key = "AIzaSyDU-YwMjCkEt47IickWS5SBVc9WnxcJDI8";
+
+  YoutubeAPI youtube = YoutubeAPI(key);
+  List<YouTubeVideo> videoResult = [];
+
+  List<YouTubeVideo> trendingAlbums = [];
+
+  // List<AlbumModel> models = [
+  //   AlbumModel(
+  //     id: 1,
+  //     image: "assets/png/home/home1.png",
+  //     title: 'Satisfied',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   ),
+  //   AlbumModel(
+  //     id: 2,
+  //     image: "assets/png/home/home2.png",
+  //     title: 'The Cross: My Gaze',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   ),
+  //   AlbumModel(
+  //     id: 3,
+  //     image: "assets/png/home/home3.png",
+  //     title: 'Yahweh',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   ),
+  //   AlbumModel(
+  //     id: 4,
+  //     image: "assets/png/home/home4.png",
+  //     title: 'Onyedikagi',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   ),
+  //   AlbumModel(
+  //     id: 5,
+  //     image: "assets/png/home/home5.png",
+  //     title: 'Igwe',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   ),
+  //   AlbumModel(
+  //     id: 6,
+  //     image: "assets/png/home/home6.png",
+  //     title: 'Eze',
+  //     artist: 'Mercy Chinwo',
+  //     year: '2021',
+  //     download: 1,
+  //     plays: 2,
+  //     songs: 2,
+  //     genre: "",
+  //     like: 2,
+  //   )
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      callAPI();
+    });
+  }
+
+  Future<void> callAPI() async {
+    List<YouTubeVideo> listVideo = await youtube.getTrends(regionCode: 'VN');
+    trendingAlbums.addAll(listVideo);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,25 +121,25 @@ class _SearchScreenState extends State<SearchScreen> {
       offstage: !widget.isCurrent,
       child: Scaffold(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              GetIt.I
-                  .get<NavigationService>()
-                  .clearAllTo(routeName: Routes.home);
-            },
-            child: SvgPicture.asset(
-              Assets.BACK,
-              height: 24,
-              width: 24,
-              color: const Color(0xffffffff),
-              // fit: BoxFit.fill,
-            ),
-          ),
-          automaticallyImplyLeading: true,
-          backgroundColor: Colors.black,
-          elevation: 0,
-        ),
+        // appBar: AppBar(
+        //   // leading: GestureDetector(
+        //   //   onTap: () {
+        //   //     GetIt.I
+        //   //         .get<NavigationService>()
+        //   //         .clearAllTo(routeName: Routes.home);
+        //   //   },
+        //   //   child: SvgPicture.asset(
+        //   //     Assets.BACK,
+        //   //     height: 24,
+        //   //     width: 24,
+        //   //     color: const Color(0xffffffff),
+        //   //     // fit: BoxFit.fill,
+        //   //   ),
+        //   // ),
+        //   automaticallyImplyLeading: true,
+        //   backgroundColor: Colors.black,
+        //   elevation: 0,
+        // ),
         body: SafeArea(
           child: Column(
             children: [
@@ -152,7 +174,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         // fit: BoxFit.fill,
                       ),
                     ),
-                    hintText: "Mercy Chinwo",
+                    hintText: "Search",
                     // hintStyle: textFieldPlaceholderTextStyle(context),
                     isDense: true,
                     filled: true,
@@ -182,134 +204,44 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemBuilder: (c, i) {
                     return InkWell(
                       onTap: () {
-                        GetIt.I
-                            .get<NavigationService>()
-                            .to(routeName: Routes.searchResult);
+                        GetIt.I.get<NavigationService>().to(
+                            routeName: Routes.playingNow,
+                            arguments: trendingAlbums[i]);
                       },
                       child: SizedBox(
-                        // height: 90.h,
+                        height: 48.h,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
-                              width: 85.r,
-                              height: 85.r,
-                              margin: EdgeInsets.only(right: 14.w),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                image: DecorationImage(
-                                  image: AssetImage(models[i].image),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: SizedBox(
+                                width: 85.r,
+                                height: 85.r,
+                                child: Image.network(
+                                  trendingAlbums[i].thumbnail.high.url ?? '',
                                   fit: BoxFit.cover,
+                                  width: 85.r,
+                                  height: 85.r,
                                 ),
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Album - ${models[i].songs} songs - ${models[i].year}",
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                            Container(
+                              padding: EdgeInsets.only(left: 12),
+                              width: MediaQuery.of(context).size.width - 140.r,
+                              child: Text(
+                                trendingAlbums[i].title,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: Colors.white,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                Text(
-                                  models[i].title,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      fontSize: 20.sp,
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  models[i].artist,
-                                  style: GoogleFonts.montserrat(
-                                    textStyle: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 2.h, right: 4.w),
-                                      child: SvgPicture.asset(
-                                        Assets.PLAY,
-                                        height: 20.w,
-                                        width: 20.w,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Text(
-                                      models[i].plays.toString(),
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontSize: 14.sp,
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 2.h, right: 4.w),
-                                      child: SvgPicture.asset(
-                                        Assets.DOWNLOAD,
-                                        height: 20.w,
-                                        width: 20.w,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Text(
-                                      models[i].download.toString(),
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontSize: 14.sp,
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 2.h, right: 4.w),
-                                      child: SvgPicture.asset(
-                                        Assets.HEART,
-                                        height: 20.w,
-                                        width: 20.w,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Text(
-                                      models[i].plays.toString(),
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontSize: 14.sp,
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 12.w)
-                                  ],
-                                )
-                              ],
+                                maxLines: 3,
+                              ),
                             )
                           ],
                         ),
@@ -323,7 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       margin: EdgeInsets.symmetric(vertical: 12.h),
                     );
                   },
-                  itemCount: models.length,
+                  itemCount: trendingAlbums.length,
                 ),
               )
             ],

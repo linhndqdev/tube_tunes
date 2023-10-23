@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tube_tunes/screens/bookmark/bookmark_screen.dart';
+import 'package:tube_tunes/screens/home/home_screen.dart';
 import 'package:tube_tunes/screens/playing/playing_widget.dart';
 import 'package:tube_tunes/screens/root/bottom_nav.dart';
-import 'package:tube_tunes/screens/home/home_screen.dart';
-import 'package:tube_tunes/screens/playlist/playlist_screen.dart';
 import 'package:tube_tunes/screens/search/search_screen.dart';
 
 class RootWidget extends StatefulWidget {
@@ -14,7 +12,7 @@ class RootWidget extends StatefulWidget {
 }
 
 class _RootWidgetState extends State<RootWidget> {
-  Tabs currentTab = Tabs.home;
+  Tabs currentTab = Tabs.search;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +28,16 @@ class _RootWidgetState extends State<RootWidget> {
             isCurrent: currentTab == Tabs.search,
             key: Key(Tabs.search.name),
           ),
-          PlayListScreen(
-            isCurrent: currentTab == Tabs.playlist,
-            key: Key(Tabs.playlist.name),
-          ),
-          BookMarkScreen(
-            isCurrent: currentTab == Tabs.saved,
-            key: Key(Tabs.saved.name),
-          ),
+          // PlayListScreen(
+          //   isCurrent: currentTab == Tabs.playlist,
+          //   key: Key(Tabs.playlist.name),
+          // ),
+          // BookMarkScreen(
+          //   isCurrent: currentTab == Tabs.saved,
+          //   key: Key(Tabs.saved.name),
+          // ),
           Visibility(
-            visible: currentTab == Tabs.home || currentTab == Tabs.playlist,
+            visible: currentTab == Tabs.home,
             child: const Align(
               alignment: Alignment.bottomCenter,
               child: PlayingWidget(),

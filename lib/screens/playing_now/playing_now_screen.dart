@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tube_tunes/res/assets.dart';
-import 'package:tube_tunes/util/navigation/navigation_service.dart';
+import 'package:tube_tunes/util/youtube/src/model/youtube_video.dart';
 
 class PlayingNowScreen extends StatefulWidget {
-  const PlayingNowScreen({Key? key}) : super(key: key);
+  final YouTubeVideo video;
+
+  const PlayingNowScreen({required this.video, Key? key}) : super(key: key);
 
   @override
   _PlayingNowScreenState createState() => _PlayingNowScreenState();
@@ -20,23 +21,23 @@ class _PlayingNowScreenState extends State<PlayingNowScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            GetIt.I.get<NavigationService>().back();
-          },
-          child: SvgPicture.asset(
-            Assets.BACK,
-            height: 24,
-            width: 24,
-            color: const Color(0xffffffff),
-            // fit: BoxFit.fill,
-          ),
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.black,
-        elevation: 0,
-      ),
+      // appBar: AppBar(
+      //   leading: GestureDetector(
+      //     onTap: () {
+      //       GetIt.I.get<NavigationService>().back();
+      //     },
+      //     child: SvgPicture.asset(
+      //       Assets.BACK,
+      //       height: 24,
+      //       width: 24,
+      //       color: const Color(0xffffffff),
+      //       // fit: BoxFit.fill,
+      //     ),
+      //   ),
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Colors.black,
+      //   elevation: 0,
+      // ),
       body: SafeArea(
         child: Column(
           children: [
@@ -54,46 +55,16 @@ class _PlayingNowScreenState extends State<PlayingNowScreen> {
             SizedBox(height: 22.h),
             Padding(
               padding: EdgeInsets.only(left: 39.w, right: 39.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SvgPicture.asset(
-                    Assets.HEART_OUTLINED,
-                    height: 24.w,
-                    width: 24.w,
-                    fit: BoxFit.fill,
+              child: Text(
+                widget.video.title,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 10.sp,
+                    color: Colors.white,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w600,
                   ),
-                  Text(
-                    "Mercy Chinwo",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                        fontSize: 24.sp,
-                        color: Colors.white,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    Assets.DOWNLOAD,
-                    height: 24.w,
-                    width: 24.w,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5.h),
-            Text(
-              "Minister GUC",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.workSans(
-                textStyle: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.white,
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
